@@ -43,6 +43,7 @@ type
     arrayOfPivots = array [1..AmountOfPivots] of pivot; 
 
 var
+    OriginalAttributes: integer;
     Steps: integer;
     AmountOfRings: integer;
     PivotWidth, PivotHeight: integer;
@@ -177,12 +178,12 @@ var
     i: integer;
 begin
     PivotWidth := ScreenWidth div 5;
-    PivotHeight := ScreenHeight div 2;
+    PivotHeight := AmountOfRings * 2;
 
     for i := 1 to AmountOfPivots do begin
         Pivots[i].Center.x := ScreenWidth - (4 - i) * ScreenWidth div 3 + 
-                              ScreenWidth div 20 + PivotWidth div 2;
-        Pivots[i].Center.y := ScreenHeight - ScreenHeight div 10;
+                              ScreenWidth div 15 + PivotWidth div 2;
+        Pivots[i].Center.y := ScreenHeight - ScreenHeight div 3;
         InitSOR(Pivots[i].RingStack, i);
     end;
     
@@ -198,7 +199,7 @@ begin
     FastAnimation := not ((ParamStr(3) = '') or (ParamStr(3) = '0'));
     Val(ParamStr(4), AnimationDelay);
     if AnimationDelay = 0 then
-        AnimationDelay := 25; 
+        AnimationDelay := 15; 
     if AmountOfRings = 0 then begin
         write('Input amount of rings to solve: ');
         readln(AmountOfRings)
@@ -374,6 +375,7 @@ end;
 
 
 begin
+    OriginalAttributes := TextAttr;
     InitLocales();
     ReloadScreen();
     writeln('Press Any key to start application...');
@@ -387,6 +389,8 @@ begin
     delay(DelayDuration);
     writeln('Press Any key to close application...');
     ReadKey;
+    write(#27'[0m');
+    TextAttr := OriginalAttributes;
     clrscr;
 end.
 
